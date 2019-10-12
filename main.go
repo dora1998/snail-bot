@@ -27,5 +27,9 @@ func main() {
 		fmt.Printf("%#v\n", body)
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.HandleFunc("/tweet", func(w http.ResponseWriter, r *http.Request) {
+		tweet("test tweet from bot")
+	})
+
+	_ = http.ListenAndServe(":8080", nil)
 }
