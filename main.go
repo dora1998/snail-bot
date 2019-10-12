@@ -25,6 +25,15 @@ func main() {
 		}
 
 		fmt.Printf("%#v\n", body)
+		statusId, err := extractStatusIdFromUrl(body.LinkToTweet)
+		if err != nil {
+			fmt.Printf(err.Error())
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		client := NewTwitterClient()
+		client.reply(body.Text, statusId)
 	})
 
 	_ = http.ListenAndServe(":8080", nil)
