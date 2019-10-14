@@ -9,4 +9,4 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 )
 
-replace github.com/dghubble/go-twitter v0.0.0-20190719072343-39e5462e111f => ../go-twitter
+replace github.com/dghubble/go-twitter v0.0.0-20190719072343-39e5462e111f => github.com/dora1998/go-twitter v0.0.0-20191014181053-ad41280878c1
