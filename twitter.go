@@ -68,3 +68,13 @@ func extractStatusIdFromUrl(url string) (int64, error) {
 
 	return id, nil
 }
+
+func extractBody(text string) (string, error) {
+	regexpObj := regexp.MustCompile(".*@assignment_bot (.+)$")
+	res := regexpObj.FindStringSubmatch(text)
+
+	if res == nil {
+		return "", fmt.Errorf("failed extractBody (no match)")
+	}
+	return res[1], nil
+}

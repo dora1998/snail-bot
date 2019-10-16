@@ -38,3 +38,52 @@ func Test_extractStatusIdFromUrl(t *testing.T) {
 		})
 	}
 }
+
+func Test_extractBody(t *testing.T) {
+	type args struct {
+		text string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{
+			name: "correct pattern",
+			args: args{
+				text: "@assignment_bot 追加 テストタスク 10/16",
+			},
+			want:    "追加 テストタスク 10/16",
+			wantErr: false,
+		},
+		{
+			name: "correct pattern w/comment",
+			args: args{
+				text: "これは無視 @assignment_bot 削除 テストタスク",
+			},
+			want:    "削除 テストタスク",
+			wantErr: false,
+		},
+		{
+			name: "incorrect pattern",
+			args: args{
+				text: "@assignment_bot",
+			},
+			want:    "",
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := extractBody(tt.args.text)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("extractBody() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("extractBody() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
