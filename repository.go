@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/google/uuid"
+	"time"
 )
 
 type TaskRepository struct {
@@ -25,8 +26,8 @@ func NewTaskRepository() (*TaskRepository, error) {
 	return repository, nil
 }
 
-func (r *TaskRepository) Add(body string, createdBy string) *Task {
-	task := &Task{Id: r.generateId(), Body: body, CreatedBy: createdBy}
+func (r *TaskRepository) Add(body string, deadline time.Time, createdBy string) *Task {
+	task := &Task{Id: r.generateId(), Body: body, Deadline: deadline, CreatedBy: createdBy, CreatedAt: time.Now()}
 	fmt.Printf("%#v\n", task)
 	r.tasks = append(r.tasks, task)
 	return task

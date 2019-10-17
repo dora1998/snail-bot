@@ -15,6 +15,7 @@ func TestTaskRepository_Add(t *testing.T) {
 	}
 	type args struct {
 		body      string
+		deadline  time.Time
 		createdBy string
 	}
 	type want struct {
@@ -38,6 +39,7 @@ func TestTaskRepository_Add(t *testing.T) {
 			},
 			args: args{
 				body:      "task test",
+				deadline:  time.Time{},
 				createdBy: "2019",
 			},
 			want: want{
@@ -45,12 +47,14 @@ func TestTaskRepository_Add(t *testing.T) {
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
+					CreatedAt: time.Time{},
 					CreatedBy: "2019",
 				},
 				tasks: []*Task{{
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
+					CreatedAt: time.Time{},
 					CreatedBy: "2019",
 				}},
 			},
@@ -63,7 +67,7 @@ func TestTaskRepository_Add(t *testing.T) {
 				uuid:       tt.fields.uuid,
 				generateId: tt.fields.generateId,
 			}
-			got := r.Add(tt.args.body, tt.args.createdBy)
+			got := r.Add(tt.args.body, tt.args.deadline, tt.args.createdBy)
 			if !reflect.DeepEqual(got, tt.want.got) {
 				t.Errorf("Add() = %#v, want %#v", got, tt.want.got)
 			}
@@ -96,7 +100,8 @@ func TestTaskRepository_Remove(t *testing.T) {
 					Id:        "hoge",
 					Body:      "test body",
 					Deadline:  time.Time{},
-					CreatedBy: "2019",
+					CreatedAt: time.Time{},
+					CreatedBy: "d0ra1998",
 				}},
 				uuid:       uuid.UUID{},
 				generateId: nil,
