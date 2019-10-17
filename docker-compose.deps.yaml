@@ -1,0 +1,19 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - microservices
+    environment:
+      - MYSQL_ROOT_PASSWORD=hogefuga
+      - MYSQL_DATABASE=snail_bot
+      - MYSQL_USER=snailbot
+      - MYSQL_PASSWORD=botdatabase
+volumes:
+  mysql-data:
+networks:
+  microservices:
