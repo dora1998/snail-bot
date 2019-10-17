@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 )
 
 type CallbackBody struct {
@@ -19,17 +20,28 @@ func main() {
 	handler := NewCommandHandler()
 	handler.addCommand(&Command{
 		name: "追加",
-		handleFunc: func(body string, statusId int64) {
+		handleFunc: func(body string, username string, statusId int64) {
 			fmt.Printf("add: %s (%v)\n", body, statusId)
-			// TODO: 日付処理
-			repo.Add(body, "10/16")
+
+			regexpObj := regexp.MustCompile("^(.+)\\s([0-9]+/[0-9]+)$")
+			parsedBody := regexpObj.FindStringSubmatch(body)
+			if parsedBody == nil {
+				return
+			}
+
+			parsedDate, err := parseDateStr(body)
+			if err != nil {
+				return
+			}
+
+			repo.Add(body, parsedDate, username)
 			client := NewTwitterClient()
 			client.reply(body, statusId)
 		},
 	})
 	handler.addCommand(&Command{
 		name: "一覧",
-		handleFunc: func(_ string, statusId int64) {
+		handleFunc: func(_ string, username string, statusId int64) {
 			fmt.Printf("list (%v)\n", statusId)
 
 			output := ""
@@ -66,7 +78,7 @@ func main() {
 			return
 		}
 
-		err = handler.resolve(text, statusId)
+		err = handler.resolve(text, callbackBody.UserName, statusId)
 		if err != nil {
 			fmt.Printf(err.Error())
 			return

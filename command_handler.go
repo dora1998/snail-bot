@@ -7,7 +7,7 @@ import (
 
 type Command struct {
 	name       string
-	handleFunc func(body string, statusId int64)
+	handleFunc func(body string, username string, statusId int64)
 }
 
 type CommandHandler struct {
@@ -18,7 +18,7 @@ func NewCommandHandler() *CommandHandler {
 	return &CommandHandler{commands: []*Command{}}
 }
 
-func (h *CommandHandler) resolve(text string, statusId int64) error {
+func (h *CommandHandler) resolve(text string, username string, statusId int64) error {
 	regexpObj := regexp.MustCompile("^(\\S+)(\\s(.+))*$")
 	res := regexpObj.FindStringSubmatch(text)
 	if res == nil {
@@ -29,7 +29,7 @@ func (h *CommandHandler) resolve(text string, statusId int64) error {
 	fmt.Printf("%s: %s\n", commandName, commandBody)
 	for _, c := range h.commands {
 		if commandName == c.name {
-			c.handleFunc(commandBody, statusId)
+			c.handleFunc(commandBody, username, statusId)
 			return nil
 		}
 	}
