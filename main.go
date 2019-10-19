@@ -14,6 +14,7 @@ type TaskRepository interface {
 	Remove(id string)
 	GetAllTasks() []*Task
 	GetTaskById(id string) *Task
+	GetTaskByBody(name string) *Task
 }
 
 type CallbackBody struct {

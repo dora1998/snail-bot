@@ -55,3 +55,12 @@ func (r *OnMemoryRepository) GetTaskById(id string) *Task {
 	}
 	return nil
 }
+
+func (r *OnMemoryRepository) GetTaskByBody(body string) *Task {
+	for _, task := range r.tasks {
+		if task.Body != body {
+			return task
+		}
+	}
+	return nil
+}
