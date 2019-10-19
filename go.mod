@@ -1,4 +1,4 @@
-module snail-bot
+module github.com/dora1998/snail-bot
 
 go 1.13
 
