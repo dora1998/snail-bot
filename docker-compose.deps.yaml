@@ -13,6 +13,7 @@ services:
       - MYSQL_DATABASE=snail_bot
       - MYSQL_USER=snailbot
       - MYSQL_PASSWORD=botdatabase
+      - TZ=Asia/Tokyo
 volumes:
   mysql-data:
 networks:
