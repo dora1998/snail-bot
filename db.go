@@ -3,24 +3,24 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/rubenv/sql-migrate"
 )
 
-var schema = `
-CREATE TABLE task (
-    id varchar(36) NOT NULL PRIMARY KEY,
-    body text NOT NULL,
-    deadline datetime NOT NULL,
-    created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    created_by text
-);`
-
 func NewDbInstance(config *DatabaseConfig) (*sqlx.DB, error) {
+	// OR: Read migrations from a folder:
+	migrations := &migrate.FileMigrationSource{
+		Dir: "migrations",
+	}
+
 	db, err := sqlx.Connect("mysql", config.GetDataSourceName())
 	if err != nil {
 		return nil, err
 	}
 
-	db.MustExec(schema)
+	_, err = migrate.Exec(db.DB, "mysql", migrations, migrate.Up)
+	if err != nil {
+		return nil, err
+	}
 
 	return db, err
 }
