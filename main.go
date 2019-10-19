@@ -29,11 +29,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	_, err = NewDbInstance(dbConfig)
+	db, err := NewDBInstance(dbConfig)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	repo, _ := NewOnMemoryRepository()
+	repo := NewDBRepository(db)
 
 	handler := NewCommandHandler()
 	handler.addCommand(&Command{
