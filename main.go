@@ -11,8 +11,8 @@ import (
 
 type TaskRepository interface {
 	Add(body string, deadline time.Time, createdBy string) *Task
-	Remove(id string)
-	GetAllTasks() []*Task
+	Remove(id string) error
+	GetAllTasks() []Task
 	GetTaskById(id string) *Task
 	GetTaskByBody(name string) *Task
 }
