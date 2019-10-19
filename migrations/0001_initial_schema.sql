@@ -1,5 +1,5 @@
 -- +migrate Up
-CREATE TABLE task (
+CREATE TABLE tasks (
                       id varchar(36) NOT NULL PRIMARY KEY,
                       body text NOT NULL,
                       deadline datetime NOT NULL,
@@ -8,4 +8,4 @@ CREATE TABLE task (
 );
 
 -- +migrate Down
-DROP TABLE task;
+DROP TABLE tasks;
