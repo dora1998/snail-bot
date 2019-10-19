@@ -64,7 +64,7 @@ func main() {
 
 			output := ""
 			for _, t := range repo.GetAllTasks() {
-				output += t.Body + "\n"
+				output += fmt.Sprintf("%s(%s)\n", t.Body, t.Deadline.Format("1/2"))
 			}
 
 			client := NewTwitterClient()
