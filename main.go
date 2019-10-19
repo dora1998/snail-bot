@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"regexp"
 )
@@ -15,6 +16,14 @@ type CallbackBody struct {
 }
 
 func main() {
+	dbConfig, err := ReadDBConfig()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	_, err = NewDbInstance(dbConfig)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	repo, _ := NewTaskRepository()
 
 	handler := NewCommandHandler()
