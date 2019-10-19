@@ -1,0 +1,9 @@
+development:
+  dialect: mysql
+  datasource: ${BOT_DB_USERNAME}:${BOT_DB_PASSWORD}@tcp(${BOT_DB_HOST}:${BOT_DB_PORT})/${BOT_DB_NAME}?parseTime=true
+  dir: migrations
+
+production:
+  dialect: mysql
+  datasource: ${BOT_DB_USERNAME}:${BOT_DB_PASSWORD}@tcp(${BOT_DB_HOST}:${BOT_DB_PORT})/${BOT_DB_NAME}?parseTime=true
+  dir: migrations
