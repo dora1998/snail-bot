@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-type TaskRepository struct {
+type OnMemoryRepository struct {
 	tasks      []*Task
 	uuid       uuid.UUID
 	generateId func() string
 }
 
-func NewTaskRepository() (*TaskRepository, error) {
-	repository := &TaskRepository{tasks: make([]*Task, 0)}
+func NewOnMemoryRepository() (TaskRepository, error) {
+	repository := &OnMemoryRepository{tasks: make([]*Task, 0)}
 
 	u, err := uuid.NewRandom()
 	if err != nil {
@@ -26,14 +26,14 @@ func NewTaskRepository() (*TaskRepository, error) {
 	return repository, nil
 }
 
-func (r *TaskRepository) Add(body string, deadline time.Time, createdBy string) *Task {
+func (r *OnMemoryRepository) Add(body string, deadline time.Time, createdBy string) *Task {
 	task := &Task{Id: r.generateId(), Body: body, Deadline: deadline, CreatedBy: createdBy, CreatedAt: time.Now()}
 	fmt.Printf("%#v\n", task)
 	r.tasks = append(r.tasks, task)
 	return task
 }
 
-func (r *TaskRepository) Remove(id string) {
+func (r *OnMemoryRepository) Remove(id string) {
 	res := make([]*Task, 0)
 	for _, task := range r.tasks {
 		if task.Id != id {
@@ -43,11 +43,11 @@ func (r *TaskRepository) Remove(id string) {
 	r.tasks = res
 }
 
-func (r *TaskRepository) GetAllTasks() []*Task {
+func (r *OnMemoryRepository) GetAllTasks() []*Task {
 	return r.tasks
 }
 
-func (r *TaskRepository) GetTaskById(id string) *Task {
+func (r *OnMemoryRepository) GetTaskById(id string) *Task {
 	for _, task := range r.tasks {
 		if task.Id != id {
 			return task

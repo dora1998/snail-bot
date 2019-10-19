@@ -6,7 +6,15 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"time"
 )
+
+type TaskRepository interface {
+	Add(body string, deadline time.Time, createdBy string) *Task
+	Remove(id string)
+	GetAllTasks() []*Task
+	GetTaskById(id string) *Task
+}
 
 type CallbackBody struct {
 	Text        string `json:"text"`
@@ -24,7 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	repo, _ := NewTaskRepository()
+	repo, _ := NewOnMemoryRepository()
 
 	handler := NewCommandHandler()
 	handler.addCommand(&Command{
