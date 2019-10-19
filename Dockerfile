@@ -12,6 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go install -v \
 
 FROM alpine:latest
 
+COPY --from=build-env /go/src/github.com/dora1998/snail-bot/migrations /migrations
 COPY --from=build-env /go/bin/server /snail-bot
 RUN chmod a+x /snail-bot
 
