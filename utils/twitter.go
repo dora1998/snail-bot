@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -40,7 +40,7 @@ func (c *TwitterClient) tweet(msg string) *twitter.Tweet {
 	return tweet
 }
 
-func (c *TwitterClient) reply(msg string, tweetId int64) *twitter.Tweet {
+func (c *TwitterClient) Reply(msg string, tweetId int64) *twitter.Tweet {
 	// Send a Tweet
 	tweet, _, err := c.client.Statuses.Update(msg, &twitter.StatusUpdateParams{
 		InReplyToStatusID:         tweetId,
@@ -53,7 +53,7 @@ func (c *TwitterClient) reply(msg string, tweetId int64) *twitter.Tweet {
 	return tweet
 }
 
-func extractStatusIdFromUrl(url string) (int64, error) {
+func ExtractStatusIdFromUrl(url string) (int64, error) {
 	regexpObj := regexp.MustCompile("^http://twitter.com/.+/status/(.+)$")
 	res := regexpObj.FindStringSubmatch(url)
 
@@ -69,7 +69,7 @@ func extractStatusIdFromUrl(url string) (int64, error) {
 	return id, nil
 }
 
-func extractBody(text string) (string, error) {
+func ExtractBody(text string) (string, error) {
 	regexpObj := regexp.MustCompile(".*@assignment_bot (.+)$")
 	res := regexpObj.FindStringSubmatch(text)
 

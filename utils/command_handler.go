@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 )
 
 type Command struct {
-	name       string
-	handleFunc func(body string, username string, statusId int64)
+	Name       string
+	HandleFunc func(body string, username string, statusId int64)
 }
 
 type CommandHandler struct {
@@ -18,7 +18,7 @@ func NewCommandHandler() *CommandHandler {
 	return &CommandHandler{commands: []*Command{}}
 }
 
-func (h *CommandHandler) resolve(text string, username string, statusId int64) error {
+func (h *CommandHandler) Resolve(text string, username string, statusId int64) error {
 	regexpObj := regexp.MustCompile("^(\\S+)(\\s(.+))*$")
 	res := regexpObj.FindStringSubmatch(text)
 	if res == nil {
@@ -28,8 +28,8 @@ func (h *CommandHandler) resolve(text string, username string, statusId int64) e
 	commandName, commandBody := res[1], res[3]
 	fmt.Printf("%s: %s\n", commandName, commandBody)
 	for _, c := range h.commands {
-		if commandName == c.name {
-			c.handleFunc(commandBody, username, statusId)
+		if commandName == c.Name {
+			c.HandleFunc(commandBody, username, statusId)
 			return nil
 		}
 	}
@@ -37,6 +37,6 @@ func (h *CommandHandler) resolve(text string, username string, statusId int64) e
 	return fmt.Errorf("failed resolve (no match)")
 }
 
-func (h *CommandHandler) addCommand(c *Command) {
+func (h *CommandHandler) AddCommand(c *Command) {
 	h.commands = append(h.commands, c)
 }

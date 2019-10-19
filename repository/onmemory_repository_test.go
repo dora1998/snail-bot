@@ -1,6 +1,7 @@
-package main
+package repository
 
 import (
+	"github.com/dora1998/snail-bot/models"
 	"github.com/google/uuid"
 	"reflect"
 	"testing"
@@ -9,7 +10,7 @@ import (
 
 func TestTaskRepository_Add(t *testing.T) {
 	type fields struct {
-		tasks      []*Task
+		tasks      []models.Task
 		uuid       uuid.UUID
 		generateId func() string
 	}
@@ -19,8 +20,8 @@ func TestTaskRepository_Add(t *testing.T) {
 		createdBy string
 	}
 	type want struct {
-		got   *Task
-		tasks []*Task
+		got   *models.Task
+		tasks []models.Task
 	}
 	tests := []struct {
 		name   string
@@ -31,7 +32,7 @@ func TestTaskRepository_Add(t *testing.T) {
 		{
 			name: "test",
 			fields: fields{
-				tasks: make([]*Task, 0),
+				tasks: make([]models.Task, 0),
 				uuid:  uuid.UUID{},
 				generateId: func() string {
 					return "hoge"
@@ -43,14 +44,14 @@ func TestTaskRepository_Add(t *testing.T) {
 				createdBy: "2019",
 			},
 			want: want{
-				got: &Task{
+				got: &models.Task{
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
 					CreatedAt: time.Time{},
 					CreatedBy: "2019",
 				},
-				tasks: []*Task{{
+				tasks: []models.Task{{
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
@@ -62,7 +63,7 @@ func TestTaskRepository_Add(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := TaskRepository{
+			r := OnMemoryRepository{
 				tasks:      tt.fields.tasks,
 				uuid:       tt.fields.uuid,
 				generateId: tt.fields.generateId,
@@ -80,7 +81,7 @@ func TestTaskRepository_Add(t *testing.T) {
 
 func TestTaskRepository_Remove(t *testing.T) {
 	type fields struct {
-		tasks      []*Task
+		tasks      []models.Task
 		uuid       uuid.UUID
 		generateId func() string
 	}
@@ -91,12 +92,12 @@ func TestTaskRepository_Remove(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   []*Task
+		want   []models.Task
 	}{
 		{
 			name: "test",
 			fields: fields{
-				tasks: []*Task{{
+				tasks: []models.Task{{
 					Id:        "hoge",
 					Body:      "test body",
 					Deadline:  time.Time{},
@@ -109,12 +110,12 @@ func TestTaskRepository_Remove(t *testing.T) {
 			args: args{
 				id: "hoge",
 			},
-			want: []*Task{},
+			want: []models.Task{},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			r := TaskRepository{
+			r := OnMemoryRepository{
 				tasks:      tt.fields.tasks,
 				uuid:       tt.fields.uuid,
 				generateId: tt.fields.generateId,

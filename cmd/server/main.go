@@ -3,19 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dora1998/snail-bot/db"
+	"github.com/dora1998/snail-bot/repository"
+	"github.com/dora1998/snail-bot/utils"
 	"log"
 	"net/http"
 	"regexp"
-	"time"
 )
-
-type TaskRepository interface {
-	Add(body string, deadline time.Time, createdBy string) *Task
-	Remove(id string) error
-	GetAllTasks() []Task
-	GetTaskById(id string) *Task
-	GetTaskByBody(name string) *Task
-}
 
 type CallbackBody struct {
 	Text        string `json:"text"`
@@ -25,20 +19,20 @@ type CallbackBody struct {
 }
 
 func main() {
-	dbConfig, err := ReadDBConfig()
+	dbConfig, err := utils.ReadDBConfig()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	db, err := NewDBInstance(dbConfig)
+	dbInstance, err := db.NewDBInstance(dbConfig)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	repo := NewDBRepository(db)
+	repo := repository.NewDBRepository(dbInstance)
 
-	handler := NewCommandHandler()
-	handler.addCommand(&Command{
-		name: "追加",
-		handleFunc: func(body string, username string, statusId int64) {
+	handler := utils.NewCommandHandler()
+	handler.AddCommand(&utils.Command{
+		Name: "追加",
+		HandleFunc: func(body string, username string, statusId int64) {
 			fmt.Printf("add: %s (%v)\n", body, statusId)
 
 			regexpObj := regexp.MustCompile("^(.+)\\s([0-9]+/[0-9]+)$")
@@ -47,19 +41,19 @@ func main() {
 				return
 			}
 
-			parsedDate, err := parseDateStr(body)
+			parsedDate, err := utils.ParseDateStr(body)
 			if err != nil {
 				return
 			}
 
 			repo.Add(body, parsedDate, username)
-			client := NewTwitterClient()
-			client.reply(body, statusId)
+			client := utils.NewTwitterClient()
+			client.Reply(body, statusId)
 		},
 	})
-	handler.addCommand(&Command{
-		name: "一覧",
-		handleFunc: func(_ string, username string, statusId int64) {
+	handler.AddCommand(&utils.Command{
+		Name: "一覧",
+		HandleFunc: func(_ string, username string, statusId int64) {
 			fmt.Printf("list (%v)\n", statusId)
 
 			output := ""
@@ -67,8 +61,8 @@ func main() {
 				output += fmt.Sprintf("%s(%s)\n", t.Body, t.Deadline.Format("1/2"))
 			}
 
-			client := NewTwitterClient()
-			client.reply(output, statusId)
+			client := utils.NewTwitterClient()
+			client.Reply(output, statusId)
 		},
 	})
 
@@ -83,20 +77,20 @@ func main() {
 		}
 
 		fmt.Printf("%#v\n", callbackBody)
-		statusId, err := extractStatusIdFromUrl(callbackBody.LinkToTweet)
+		statusId, err := utils.ExtractStatusIdFromUrl(callbackBody.LinkToTweet)
 		if err != nil {
 			fmt.Printf(err.Error())
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
-		text, err := extractBody(callbackBody.Text)
+		text, err := utils.ExtractBody(callbackBody.Text)
 		if err != nil {
 			fmt.Printf(err.Error())
 			return
 		}
 
-		err = handler.resolve(text, callbackBody.UserName, statusId)
+		err = handler.Resolve(text, callbackBody.UserName, statusId)
 		if err != nil {
 			fmt.Printf(err.Error())
 			return

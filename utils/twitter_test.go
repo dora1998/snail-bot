@@ -1,4 +1,4 @@
-package main
+package utils
 
 import "testing"
 
@@ -27,7 +27,7 @@ func Test_extractStatusIdFromUrl(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := extractStatusIdFromUrl(tt.args.url)
+			got, err := ExtractStatusIdFromUrl(tt.args.url)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("extractStatusIdFromUrl() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -76,7 +76,7 @@ func Test_extractBody(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := extractBody(tt.args.text)
+			got, err := ExtractBody(tt.args.text)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("extractBody() error = %v, wantErr %v", err, tt.wantErr)
 				return

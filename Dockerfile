@@ -8,7 +8,7 @@ ADD . /go/src/github.com/dora1998/snail-bot
 
 RUN CGO_ENABLED=0 GOOS=linux go install -v \
     -ldflags="-w -s" \
-    github.com/dora1998/snail-bot
+    github.com/dora1998/snail-bot/cmd/server
 
 EXPOSE 8080
 ENTRYPOINT ["/go/bin/snail-bot"]

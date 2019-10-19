@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ func Float(v float64) *float64 {
 	return p
 }
 
-func parseDateStr(str string) (time.Time, error) {
+func ParseDateStr(str string) (time.Time, error) {
 	loc, _ := time.LoadLocation("Asia/Tokyo")
 
 	now := time.Now()

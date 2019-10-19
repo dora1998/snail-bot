@@ -1,12 +1,13 @@
-package main
+package db
 
 import (
+	"github.com/dora1998/snail-bot/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/rubenv/sql-migrate"
 )
 
-func NewDBInstance(config *DatabaseConfig) (*sqlx.DB, error) {
+func NewDBInstance(config *utils.DatabaseConfig) (*sqlx.DB, error) {
 	db, err := sqlx.Connect("mysql", config.GetDataSourceName())
 	if err != nil {
 		return nil, err
