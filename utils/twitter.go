@@ -30,7 +30,7 @@ func NewTwitterClient() *TwitterClient {
 	return &TwitterClient{client: client}
 }
 
-func (c *TwitterClient) tweet(msg string) *twitter.Tweet {
+func (c *TwitterClient) Tweet(msg string) *twitter.Tweet {
 	// Send a Tweet
 	tweet, _, err := c.client.Statuses.Update(msg, nil)
 	if err != nil {
