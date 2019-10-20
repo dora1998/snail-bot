@@ -23,11 +23,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
 	dbInstance, err := db.NewDBInstance(dbConfig)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	repo := repository.NewDBRepository(dbInstance)
+	err = db.RunMigration(dbInstance)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
 	handler := utils.NewCommandHandler()
 	handler.AddCommand(&utils.Command{
@@ -46,6 +50,12 @@ func main() {
 				return
 			}
 
+			dbInstance, err := db.NewDBInstance(dbConfig)
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			repo := repository.NewDBRepository(dbInstance)
+
 			repo.Add(body, parsedDate, username)
 			client := utils.NewTwitterClient()
 			client.Reply(body, statusId)
@@ -55,6 +65,12 @@ func main() {
 		Name: "一覧",
 		HandleFunc: func(_ string, username string, statusId int64) {
 			fmt.Printf("list (%v)\n", statusId)
+
+			dbInstance, err := db.NewDBInstance(dbConfig)
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			repo := repository.NewDBRepository(dbInstance)
 
 			output := ""
 			for _, t := range repo.GetAllTasks() {
