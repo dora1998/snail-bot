@@ -1,0 +1,13 @@
+version: "3"
+services:
+  snail-bot:
+    ports:
+      - "8080:8080"
+    build:
+      context: ./
+    networks:
+      - microservices
+    env_file:
+      - .env
+networks:
+  microservices:
