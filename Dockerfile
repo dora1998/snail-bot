@@ -12,9 +12,14 @@ RUN CGO_ENABLED=0 GOOS=linux go install -v \
 
 FROM alpine:latest
 
+RUN apk add bash ca-certificates curl mariadb-client
 COPY --from=build-env /go/src/github.com/dora1998/snail-bot/migrations /migrations
 COPY --from=build-env /go/bin/server /snail-bot
 RUN chmod a+x /snail-bot
 
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod a+x /docker-entrypoint.sh
+
 EXPOSE 8080
-ENTRYPOINT ["/snail-bot"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["/snail-bot"]
