@@ -12,6 +12,9 @@ RUN CGO_ENABLED=0 GOOS=linux go install -v \
 
 FROM alpine:latest
 
+RUN apk --update add tzdata && \
+    cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
 RUN apk add bash ca-certificates curl mariadb-client
 COPY --from=build-env /go/src/github.com/dora1998/snail-bot/migrations /migrations
 COPY --from=build-env /go/bin/server /snail-bot
