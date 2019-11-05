@@ -1,6 +1,7 @@
 version: "3"
 services:
   snail-bot:
+    command: /snail-bot serve
     build:
       context: ./
     networks:
