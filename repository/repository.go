@@ -10,5 +10,5 @@ type TaskRepository interface {
 	Remove(id string) error
 	GetAllTasks() []models.Task
 	GetTaskById(id string) *models.Task
-	GetTaskByBody(name string) *models.Task
+	GetTaskByBody(body string) *models.Task
 }
