@@ -22,8 +22,8 @@ func NewCommandHandler() *CommandHandler {
 	return &CommandHandler{commands: []*Command{}}
 }
 
-func (h *CommandHandler) SetDBInstance(db *sqlx.DB) {
-	h.db = db
+func SetDBInstance(db *sqlx.DB) {
+	CmdHandler.db = db
 }
 
 func (h *CommandHandler) Resolve(text string, username string, statusId int64) error {

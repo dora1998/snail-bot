@@ -32,7 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	commands.CmdHandler.SetDBInstance(dbInstance)
+	commands.SetDBInstance(dbInstance)
 	defer dbInstance.Close()
 
 	http.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
