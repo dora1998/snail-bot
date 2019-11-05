@@ -14,6 +14,12 @@ var cmdAdd = &Command{
 		fmt.Printf("add: %s (%v)\n", body, statusId)
 		client := utils.NewTwitterClient()
 
+		if !client.IsFollwing(username) {
+			fmt.Printf("PermissionError: not following @%v\n", username)
+			client.Reply("この操作はフォローされている人しかできません🙇‍♂️", statusId)
+			return
+		}
+
 		regexpObj := regexp.MustCompile("^(.+)\\s([0-9]+/[0-9]+)$")
 		parsedBody := regexpObj.FindStringSubmatch(body)
 		if parsedBody == nil {

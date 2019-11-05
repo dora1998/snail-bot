@@ -53,6 +53,18 @@ func (c *TwitterClient) Reply(msg string, tweetId int64) *twitter.Tweet {
 	return tweet
 }
 
+func (c *TwitterClient) IsFollwing(screenName string) bool {
+	user, _, err := c.client.Users.Show(&twitter.UserShowParams{
+		ScreenName: screenName,
+	})
+
+	if user == nil || err != nil {
+		return false
+	}
+
+	return user.Following
+}
+
 func ExtractStatusIdFromUrl(url string) (int64, error) {
 	regexpObj := regexp.MustCompile("^http://twitter.com/.+/status/(.+)$")
 	res := regexpObj.FindStringSubmatch(url)
