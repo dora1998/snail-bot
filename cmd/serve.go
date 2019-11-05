@@ -27,7 +27,6 @@ var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Run bot server",
 	Run: func(cmd *cobra.Command, args []string) {
-
 		dbConfig, err := utils.ReadDBConfig()
 		if err != nil {
 			log.Fatal(err.Error())
