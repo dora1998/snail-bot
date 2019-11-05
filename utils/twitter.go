@@ -53,6 +53,11 @@ func (c *TwitterClient) Reply(msg string, tweetId int64) *twitter.Tweet {
 	return tweet
 }
 
+func (c *TwitterClient) CreateFavorite(tweetId int64) error {
+	_, _, err := c.client.Favorites.Create(&twitter.FavoriteCreateParams{ID: tweetId})
+	return err
+}
+
 func (c *TwitterClient) IsFollwing(screenName string) bool {
 	user, _, err := c.client.Users.Show(&twitter.UserShowParams{
 		ScreenName: screenName,
