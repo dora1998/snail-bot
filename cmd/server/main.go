@@ -66,6 +66,7 @@ func main() {
 		}
 	})
 
+	//	￿￿TODO: 本番運用では削除する
 	http.HandleFunc("/exec", func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		body, err := ioutil.ReadAll(r.Body)
