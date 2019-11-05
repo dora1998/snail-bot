@@ -13,5 +13,5 @@ docker-compose -f docker-compose.deps.yaml -f docker-compose.dev.yaml up -d
 ## ローカル環境での実行
 
 ```shell script
-go build main.go
+go run main.go serve
 ```
