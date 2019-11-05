@@ -11,9 +11,6 @@ var rootCmd = &cobra.Command{
 	Short: "Snail Bot is Assignment management bot for \"denden\"s",
 	Long: `An assignment management Twtiter bot in Go.
                 Source Code is available at https://github.com/dora1998/snail-bot`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Do Nothing
-	},
 }
 
 func Execute() {
