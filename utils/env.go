@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/kelseyhightower/envconfig"
+	"net/url"
 )
 
 type Env struct {
@@ -22,12 +23,13 @@ type DatabaseConfig struct {
 
 func (d *DatabaseConfig) GetDataSourceName() string {
 	return fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8mb4",
+		"%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8mb4&loc=%s",
 		d.Username,
 		d.Password,
 		d.Host,
 		d.Port,
 		d.Name,
+		url.QueryEscape("Asia/Tokyo"),
 	)
 }
 
