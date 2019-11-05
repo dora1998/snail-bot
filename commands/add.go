@@ -38,8 +38,8 @@ var cmdAdd = &Command{
 		repo := repository.NewDBRepository(db)
 
 		task := repo.Add(parsedBody[1], parsedDate, username)
-		if err != nil {
-			fmt.Printf("DatabaseError: %#v\n", body)
+		if task == nil {
+			fmt.Printf("DatabaseError: %v\n", body)
 			client.Reply("タスクの追加に失敗しました…", statusId)
 			return
 		}
