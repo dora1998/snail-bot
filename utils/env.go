@@ -22,7 +22,7 @@ type DatabaseConfig struct {
 
 func (d *DatabaseConfig) GetDataSourceName() string {
 	return fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?parseTime=true",
+		"%s:%s@tcp(%s:%s)/%s?parseTime=true&charset=utf8mb4",
 		d.Username,
 		d.Password,
 		d.Host,
