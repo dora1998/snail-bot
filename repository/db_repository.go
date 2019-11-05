@@ -50,7 +50,7 @@ func (r *DBRepository) Remove(id string) error {
 
 func (r *DBRepository) GetAllTasks() []models.Task {
 	var tasks []models.Task
-	r.db.Select(&tasks, "SELECT * FROM tasks ORDER BY deadline ASC")
+	r.db.Select(&tasks, "SELECT * FROM tasks WHERE deadline > NOW() ORDER BY deadline ASC")
 	return tasks
 }
 
