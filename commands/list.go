@@ -19,6 +19,10 @@ var cmdList = &Command{
 			output += fmt.Sprintf("%s(%s)\n", t.Body, t.Deadline.Format("1/2"))
 		}
 
+		if output == "" {
+			output = "現在出ている課題はありません🎉"
+		}
+
 		client := utils.NewTwitterClient()
 		client.Reply(output, statusId)
 	},
