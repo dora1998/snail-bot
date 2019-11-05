@@ -7,7 +7,6 @@ import (
 	"github.com/dora1998/snail-bot/db"
 	"github.com/dora1998/snail-bot/utils"
 	"github.com/spf13/cobra"
-	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -68,22 +67,6 @@ var serveCmd = &cobra.Command{
 			}
 
 			err = commands.CmdHandler.Resolve(text, callbackBody.UserName, statusId)
-			if err != nil {
-				fmt.Printf(err.Error())
-				return
-			}
-		})
-
-		//	￿￿TODO: 本番運用では削除する
-		http.HandleFunc("/exec", func(w http.ResponseWriter, r *http.Request) {
-			defer r.Body.Close()
-			body, err := ioutil.ReadAll(r.Body)
-			if err != nil {
-				fmt.Printf(err.Error())
-				return
-			}
-
-			err = commands.CmdHandler.Resolve(string(body), "exec", 1185595390327787520) // statusId is dummy
 			if err != nil {
 				fmt.Printf(err.Error())
 				return
