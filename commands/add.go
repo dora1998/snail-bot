@@ -2,15 +2,13 @@ package commands
 
 import (
 	"fmt"
-	"github.com/dora1998/snail-bot/repository"
 	"github.com/dora1998/snail-bot/utils"
-	"github.com/jmoiron/sqlx"
 	"regexp"
 )
 
 var cmdAdd = &Command{
 	Name: "追加",
-	HandleFunc: func(body string, username string, statusId int64, db *sqlx.DB) {
+	HandleFunc: func(body string, username string, statusId int64, repo Repository) {
 		fmt.Printf("add: %s (%v)\n", body, statusId)
 		client := utils.NewTwitterClient()
 
@@ -34,8 +32,6 @@ var cmdAdd = &Command{
 			client.Reply("タスクの追加に失敗しました…", statusId)
 			return
 		}
-
-		repo := repository.NewDBRepository(db)
 
 		task := repo.Add(parsedBody[1], parsedDate, username)
 		if task == nil {

@@ -2,14 +2,12 @@ package commands
 
 import (
 	"fmt"
-	"github.com/dora1998/snail-bot/repository"
 	"github.com/dora1998/snail-bot/utils"
-	"github.com/jmoiron/sqlx"
 )
 
 var cmdRemove = &Command{
 	Name: "削除",
-	HandleFunc: func(body string, username string, statusId int64, db *sqlx.DB) {
+	HandleFunc: func(body string, username string, statusId int64, repo Repository) {
 		fmt.Printf("remove: %s (%v)\n", body, statusId)
 		client := utils.NewTwitterClient()
 
@@ -18,8 +16,6 @@ var cmdRemove = &Command{
 			client.Reply("この操作はフォローされている人しかできません🙇‍♂️", statusId)
 			return
 		}
-
-		repo := repository.NewDBRepository(db)
 
 		task := repo.GetTaskByBody(body)
 		if task == nil {

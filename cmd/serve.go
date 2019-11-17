@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/dora1998/snail-bot/commands"
 	"github.com/dora1998/snail-bot/db"
+	"github.com/dora1998/snail-bot/repository"
 	"github.com/dora1998/snail-bot/utils"
 	"github.com/spf13/cobra"
 	"log"
@@ -39,7 +40,9 @@ var serveCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err.Error())
 		}
-		commands.SetDBInstance(dbInstance)
+
+		repo := repository.NewDBRepository(dbInstance)
+		commands.SetRepository(repo)
 		defer dbInstance.Close()
 
 		http.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {

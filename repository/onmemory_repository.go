@@ -12,7 +12,7 @@ type OnMemoryRepository struct {
 	generateId func() string
 }
 
-func NewOnMemoryRepository() (TaskRepository, error) {
+func NewOnMemoryRepository() (*OnMemoryRepository, error) {
 	repository := &OnMemoryRepository{tasks: make([]Task, 0)}
 
 	u, err := uuid.NewRandom()
