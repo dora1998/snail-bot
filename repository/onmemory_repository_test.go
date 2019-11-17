@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"github.com/dora1998/snail-bot/models"
 	"github.com/google/uuid"
 	"reflect"
 	"testing"
@@ -10,7 +9,7 @@ import (
 
 func TestTaskRepository_Add(t *testing.T) {
 	type fields struct {
-		tasks      []models.Task
+		tasks      []Task
 		uuid       uuid.UUID
 		generateId func() string
 	}
@@ -20,8 +19,8 @@ func TestTaskRepository_Add(t *testing.T) {
 		createdBy string
 	}
 	type want struct {
-		got   *models.Task
-		tasks []models.Task
+		got   *Task
+		tasks []Task
 	}
 	tests := []struct {
 		name   string
@@ -32,7 +31,7 @@ func TestTaskRepository_Add(t *testing.T) {
 		{
 			name: "test",
 			fields: fields{
-				tasks: make([]models.Task, 0),
+				tasks: make([]Task, 0),
 				uuid:  uuid.UUID{},
 				generateId: func() string {
 					return "hoge"
@@ -44,14 +43,14 @@ func TestTaskRepository_Add(t *testing.T) {
 				createdBy: "2019",
 			},
 			want: want{
-				got: &models.Task{
+				got: &Task{
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
 					CreatedAt: time.Time{},
 					CreatedBy: "2019",
 				},
-				tasks: []models.Task{{
+				tasks: []Task{{
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
@@ -81,7 +80,7 @@ func TestTaskRepository_Add(t *testing.T) {
 
 func TestTaskRepository_Remove(t *testing.T) {
 	type fields struct {
-		tasks      []models.Task
+		tasks      []Task
 		uuid       uuid.UUID
 		generateId func() string
 	}
@@ -92,12 +91,12 @@ func TestTaskRepository_Remove(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   []models.Task
+		want   []Task
 	}{
 		{
 			name: "test",
 			fields: fields{
-				tasks: []models.Task{{
+				tasks: []Task{{
 					Id:        "hoge",
 					Body:      "test body",
 					Deadline:  time.Time{},
@@ -110,7 +109,7 @@ func TestTaskRepository_Remove(t *testing.T) {
 			args: args{
 				id: "hoge",
 			},
-			want: []models.Task{},
+			want: []Task{},
 		},
 	}
 	for _, tt := range tests {

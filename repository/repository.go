@@ -1,14 +1,13 @@
 package repository
 
 import (
-	"github.com/dora1998/snail-bot/models"
 	"time"
 )
 
 type TaskRepository interface {
-	Add(body string, deadline time.Time, createdBy string) *models.Task
+	Add(body string, deadline time.Time, createdBy string) *Task
 	Remove(id string) error
-	GetAllTasks() []models.Task
-	GetTaskById(id string) *models.Task
-	GetTaskByBody(body string) *models.Task
+	GetAllTasks() []Task
+	GetTaskById(id string) *Task
+	GetTaskByBody(body string) *Task
 }
