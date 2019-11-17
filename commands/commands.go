@@ -2,18 +2,27 @@ package commands
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
+	"github.com/dora1998/snail-bot/repository"
 	"regexp"
+	"time"
 )
 
 type Command struct {
 	Name       string
-	HandleFunc func(body string, username string, statusId int64, db *sqlx.DB)
+	HandleFunc func(body string, username string, statusId int64, repo Repository)
 }
 
 type CommandHandler struct {
-	commands []*Command
-	db       *sqlx.DB
+	commands   []*Command
+	repository Repository
+}
+
+type Repository interface {
+	Add(body string, deadline time.Time, createdBy string) *repository.Task
+	Remove(id string) error
+	GetAllTasks() []repository.Task
+	GetTaskById(id string) *repository.Task
+	GetTaskByBody(body string) *repository.Task
 }
 
 var CmdHandler = newCommandHandler()
@@ -22,13 +31,13 @@ func newCommandHandler() *CommandHandler {
 	return &CommandHandler{commands: []*Command{}}
 }
 
-func SetDBInstance(db *sqlx.DB) {
-	CmdHandler.db = db
+func SetRepository(repo Repository) {
+	CmdHandler.repository = repo
 }
 
 func (h *CommandHandler) Resolve(text string, username string, statusId int64) error {
-	if h.db == nil {
-		return fmt.Errorf("db instance is not set")
+	if h.repository == nil {
+		return fmt.Errorf("repo is not set")
 	}
 
 	regexpObj := regexp.MustCompile("^(\\S+)(\\s(.+))*$")
@@ -41,7 +50,7 @@ func (h *CommandHandler) Resolve(text string, username string, statusId int64) e
 	fmt.Printf("%s: %s\n", commandName, commandBody)
 	for _, c := range h.commands {
 		if commandName == c.Name {
-			c.HandleFunc(commandBody, username, statusId, h.db)
+			c.HandleFunc(commandBody, username, statusId, h.repository)
 			return nil
 		}
 	}

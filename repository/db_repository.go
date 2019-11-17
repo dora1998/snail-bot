@@ -12,7 +12,7 @@ type DBRepository struct {
 	uuid uuid.UUID
 }
 
-func NewDBRepository(db *sqlx.DB) TaskRepository {
+func NewDBRepository(db *sqlx.DB) *DBRepository {
 	repo := &DBRepository{db: db}
 
 	u, _ := uuid.NewRandom()
