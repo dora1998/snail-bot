@@ -16,9 +16,9 @@ type CommandHandler struct {
 	db       *sqlx.DB
 }
 
-var CmdHandler = NewCommandHandler()
+var CmdHandler = newCommandHandler()
 
-func NewCommandHandler() *CommandHandler {
+func newCommandHandler() *CommandHandler {
 	return &CommandHandler{commands: []*Command{}}
 }
 
