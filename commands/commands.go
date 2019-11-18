@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dora1998/snail-bot/repository"
 	"regexp"
 	"time"
@@ -13,8 +14,8 @@ type Command struct {
 }
 
 type CommandHandler struct {
-	commands   []*Command
-	repository Repository
+	repository    Repository
+	twitterClient TwitterClient
 }
 
 type Repository interface {
@@ -25,10 +26,15 @@ type Repository interface {
 	GetTaskByBody(body string) *repository.Task
 }
 
-var CmdHandler = newCommandHandler()
+type TwitterClient interface {
+	Tweet(msg string) *twitter.Tweet
+	Reply(msg string, tweetId int64) *twitter.Tweet
+	CreateFavorite(tweetId int64) error
+	IsFollwing(screenName string) bool
+}
 
-func newCommandHandler() *CommandHandler {
-	return &CommandHandler{commands: []*Command{}}
+func NewCommandHandler(repo Repository, twitterClient TwitterClient) *CommandHandler {
+	return &CommandHandler{repository: repo, twitterClient: twitterClient}
 }
 
 func SetRepository(repo Repository) {
