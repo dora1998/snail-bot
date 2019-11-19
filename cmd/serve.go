@@ -42,7 +42,8 @@ var serveCmd = &cobra.Command{
 		}
 
 		repo := repository.NewDBRepository(dbInstance)
-		commands.SetRepository(repo)
+		twitterClient := utils.NewTwitterClient()
+		handler := commands.NewCommandHandler(repo, twitterClient)
 		defer dbInstance.Close()
 
 		http.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +70,7 @@ var serveCmd = &cobra.Command{
 				return
 			}
 
-			err = commands.CmdHandler.Resolve(text, callbackBody.UserName, statusId)
+			err = handler.Resolve(text, callbackBody.UserName, statusId)
 			if err != nil {
 				fmt.Printf(err.Error())
 				return

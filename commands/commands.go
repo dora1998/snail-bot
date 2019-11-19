@@ -37,15 +37,7 @@ func NewCommandHandler(repo Repository, twitterClient TwitterClient) *CommandHan
 	return &CommandHandler{repository: repo, twitterClient: twitterClient}
 }
 
-func SetRepository(repo Repository) {
-	CmdHandler.repository = repo
-}
-
 func (h *CommandHandler) Resolve(text string, username string, statusId int64) error {
-	if h.repository == nil {
-		return fmt.Errorf("repo is not set")
-	}
-
 	regexpObj := regexp.MustCompile("^(\\S+)(\\s(.+))*$")
 	res := regexpObj.FindStringSubmatch(text)
 	if res == nil {
@@ -54,16 +46,16 @@ func (h *CommandHandler) Resolve(text string, username string, statusId int64) e
 
 	commandName, commandBody := res[1], res[3]
 	fmt.Printf("%s: %s\n", commandName, commandBody)
-	for _, c := range h.commands {
-		if commandName == c.Name {
-			c.HandleFunc(commandBody, username, statusId, h.repository)
-			return nil
-		}
+
+	switch commandName {
+	case "追加":
+		h.add(commandBody, username, statusId)
+	case "削除":
+		h.remove(commandBody, username, statusId)
+	case "一覧":
+		h.list(username, statusId)
+	default:
+		return fmt.Errorf("failed resolve (no match)")
 	}
-
-	return fmt.Errorf("failed resolve (no match)")
-}
-
-func (h *CommandHandler) AddCommand(c *Command) {
-	h.commands = append(h.commands, c)
+	return nil
 }
