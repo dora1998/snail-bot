@@ -1,5 +1,8 @@
 # 🐌 Snail Bot
 
+![CI Status](https://github.com/dora1998/snail-bot/workflows/test/badge.svg)
+[![codecov](https://codecov.io/gh/dora1998/snail-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/dora1998/snail-bot)
+
 Twitterを愛してやまない電電生に向けた、課題を管理してくれるTwitter Bot
 
 ## 実行方法
