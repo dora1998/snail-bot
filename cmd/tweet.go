@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dora1998/snail-bot/db"
 	"github.com/dora1998/snail-bot/repository"
+	"github.com/dora1998/snail-bot/twitter"
 	"github.com/dora1998/snail-bot/utils"
 	"github.com/spf13/cobra"
 	"log"
@@ -40,7 +41,7 @@ var tweetCmd = &cobra.Command{
 			output += fmt.Sprintf("- %s(%s)\n", t.Body, t.Deadline.Format("1/2"))
 		}
 
-		client := utils.NewTwitterClient()
+		client := twitter.NewTwitterClient()
 		client.Tweet(output)
 	},
 }
