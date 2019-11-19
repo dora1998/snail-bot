@@ -6,6 +6,7 @@ import (
 	"github.com/dora1998/snail-bot/commands"
 	"github.com/dora1998/snail-bot/db"
 	"github.com/dora1998/snail-bot/repository"
+	"github.com/dora1998/snail-bot/twitter"
 	"github.com/dora1998/snail-bot/utils"
 	"github.com/spf13/cobra"
 	"log"
@@ -42,7 +43,7 @@ var serveCmd = &cobra.Command{
 		}
 
 		repo := repository.NewDBRepository(dbInstance)
-		twitterClient := utils.NewTwitterClient()
+		twitterClient := twitter.NewTwitterClient()
 		handler := commands.NewCommandHandler(repo, twitterClient)
 		defer dbInstance.Close()
 
@@ -57,14 +58,14 @@ var serveCmd = &cobra.Command{
 			}
 
 			fmt.Printf("%#v\n", callbackBody)
-			statusId, err := utils.ExtractStatusIdFromUrl(callbackBody.LinkToTweet)
+			statusId, err := twitter.ExtractStatusIdFromUrl(callbackBody.LinkToTweet)
 			if err != nil {
 				fmt.Printf(err.Error())
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
 
-			text, err := utils.ExtractBody(callbackBody.Text)
+			text, err := twitter.ExtractBody(callbackBody.Text)
 			if err != nil {
 				fmt.Printf(err.Error())
 				return

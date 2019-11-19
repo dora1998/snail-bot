@@ -1,9 +1,10 @@
-package utils
+package twitter
 
 import (
 	"fmt"
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
+	"github.com/dora1998/snail-bot/utils"
 	"github.com/kelseyhightower/envconfig"
 	"regexp"
 	"strconv"
@@ -14,7 +15,7 @@ type TwitterClient struct {
 }
 
 func NewTwitterClient() *TwitterClient {
-	var env Env
+	var env utils.Env
 	err := envconfig.Process("bot", &env)
 	if err != nil {
 		fmt.Println(err.Error())
