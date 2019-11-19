@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestTaskRepository_Add(t *testing.T) {
+func TestOnMemoryRepository_Add(t *testing.T) {
 	type fields struct {
 		tasks      []Task
 		uuid       uuid.UUID
@@ -78,7 +78,7 @@ func TestTaskRepository_Add(t *testing.T) {
 	}
 }
 
-func TestTaskRepository_Remove(t *testing.T) {
+func TestOnMemoryRepository_Remove(t *testing.T) {
 	type fields struct {
 		tasks      []Task
 		uuid       uuid.UUID
