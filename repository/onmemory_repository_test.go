@@ -1,13 +1,16 @@
 package repository
 
 import (
+	"github.com/dora1998/snail-bot/testutil"
 	"github.com/google/uuid"
 	"reflect"
 	"testing"
 	"time"
 )
 
-func TestTaskRepository_Add(t *testing.T) {
+var FAKETIME = time.Date(2020, 1, 1, 0, 0, 0, 0, time.Local)
+
+func TestOnMemoryRepository_Add(t *testing.T) {
 	type fields struct {
 		tasks      []Task
 		uuid       uuid.UUID
@@ -47,19 +50,21 @@ func TestTaskRepository_Add(t *testing.T) {
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
-					CreatedAt: time.Time{},
+					CreatedAt: FAKETIME,
 					CreatedBy: "2019",
 				},
 				tasks: []Task{{
 					Id:        "hoge",
 					Body:      "task test",
 					Deadline:  time.Time{},
-					CreatedAt: time.Time{},
+					CreatedAt: FAKETIME,
 					CreatedBy: "2019",
 				}},
 			},
 		},
 	}
+
+	testutil.SetFakeTime(FAKETIME)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := OnMemoryRepository{
@@ -78,7 +83,7 @@ func TestTaskRepository_Add(t *testing.T) {
 	}
 }
 
-func TestTaskRepository_Remove(t *testing.T) {
+func TestOnMemoryRepository_Remove(t *testing.T) {
 	type fields struct {
 		tasks      []Task
 		uuid       uuid.UUID

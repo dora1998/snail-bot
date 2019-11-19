@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"github.com/dora1998/snail-bot/clock"
 	"github.com/google/uuid"
 	"time"
 )
@@ -27,7 +28,7 @@ func NewOnMemoryRepository() (*OnMemoryRepository, error) {
 }
 
 func (r *OnMemoryRepository) Add(body string, deadline time.Time, createdBy string) *Task {
-	task := Task{Id: r.generateId(), Body: body, Deadline: deadline, CreatedBy: createdBy, CreatedAt: time.Now()}
+	task := Task{Id: r.generateId(), Body: body, Deadline: deadline, CreatedBy: createdBy, CreatedAt: clock.Now()}
 	fmt.Printf("%#v\n", task)
 	r.tasks = append(r.tasks, task)
 	return &task
