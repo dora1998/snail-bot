@@ -38,5 +38,5 @@ func (h *CommandHandler) add(body string, username string, statusId int64) {
 	}
 
 	fmt.Printf("added: %#v\n", task)
-	h.twitterClient.Reply(fmt.Sprintf("%v (%v)\n", parsedBody[1], parsedBody[2]), statusId)
+	h.twitterClient.Reply(fmt.Sprintf("タスクを追加しました！\n%v (%v)", parsedBody[1], parsedDate.Format("2006/1/2")), statusId)
 }
