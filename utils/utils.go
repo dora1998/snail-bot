@@ -2,13 +2,14 @@ package utils
 
 import (
 	"fmt"
+	"github.com/dora1998/snail-bot/clock"
 	"time"
 )
 
 func ParseDateStr(str string) (time.Time, error) {
 	loc, _ := time.LoadLocation("Asia/Tokyo")
 
-	now := time.Now()
+	now := clock.Now()
 	year := now.Year()
 
 	const format = "2006/1/2"
