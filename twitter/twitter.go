@@ -55,8 +55,8 @@ func (c *TwitterClient) TweetLongText(text string, headText string) ([]*twitter.
 	var prevStatusId int64 = 0
 	for i, t := range texts {
 		text := headText + "\n"
-		text = strings.ReplaceAll(text, "{paged}", string(i+1))
-		text = strings.ReplaceAll(text, "{pages}", string(pages))
+		text = strings.ReplaceAll(text, "{paged}", strconv.Itoa(i+1))
+		text = strings.ReplaceAll(text, "{pages}", strconv.Itoa(pages))
 		text += t
 		if i == 0 {
 			tweet, err := c.Tweet(text)
