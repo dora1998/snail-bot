@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "89:be:af:57:88:c7:78:27:a4:de:6e:db:03:c0:17:cc"
+      - run: ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "~/deploy.sh --rebuild --restart snail-bot"
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master
