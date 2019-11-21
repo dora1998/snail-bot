@@ -9,7 +9,7 @@ func (h *CommandHandler) list(username string, statusId int64) {
 
 	output := ""
 	for _, t := range h.repository.GetAllTasks() {
-		output += fmt.Sprintf("%s(%s)\n", t.Body, t.Deadline.Format("1/2"))
+		output += fmt.Sprintf("・%s【%s〆】\n", t.Body, t.Deadline.Format("1/2"))
 	}
 
 	if output == "" {

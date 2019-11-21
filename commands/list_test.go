@@ -39,7 +39,7 @@ func TestCommandHandler_list(t *testing.T) {
 				}}).Times(1)
 
 				mt := mock_twitter.NewMockTwitterClient(c)
-				mt.EXPECT().Reply(gomock.Eq("task test(12/31)\n"), gomock.Eq(int64(0))).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("・task test【12/31〆】\n"), gomock.Eq(int64(0))).Times(1)
 				return mr, mt
 			},
 		},
