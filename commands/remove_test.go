@@ -39,7 +39,7 @@ func TestCommandHandler_remove(t *testing.T) {
 				mr.EXPECT().Remove(gomock.Eq("hoge")).Return(nil).Times(1)
 
 				mt := mock_twitter.NewMockTwitterClient(c)
-				mt.EXPECT().IsFollwing(gomock.Eq("testuser")).Return(true).Times(1)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
 				mt.EXPECT().CreateFavorite(gomock.Eq(int64(0))).Times(1)
 				return mr, mt
 			},

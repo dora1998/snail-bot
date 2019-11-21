@@ -47,6 +47,7 @@ func (c *TwitterClient) Tweet(msg string) (*twitter.Tweet, error) {
 }
 
 func (c *TwitterClient) TweetLongText(text string, headText string) ([]*twitter.Tweet, error) {
+	// TODO: テンプレート文字列を解析後の文字数で計算する
 	maxLength := TWEET_MAX_LENGTH - utf8.RuneCountInString(headText)
 	texts := SplitLongText(text, maxLength)
 
