@@ -6,9 +6,13 @@ import (
 	"github.com/dghubble/oauth1"
 	"github.com/dora1998/snail-bot/utils"
 	"github.com/kelseyhightower/envconfig"
+	"math"
 	"regexp"
 	"strconv"
+	"unicode/utf8"
 )
+
+const TWEET_MAX_LENGTH = 140
 
 type TwitterClient struct {
 	client *twitter.Client
@@ -32,6 +36,16 @@ func NewTwitterClient() *TwitterClient {
 }
 
 func (c *TwitterClient) Tweet(msg string) *twitter.Tweet {
+	// Send a Tweet
+	tweet, _, err := c.client.Statuses.Update(msg, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Printf("%#v\n", tweet)
+	return tweet
+}
+
+func (c *TwitterClient) TweetLongText(msg string) *twitter.Tweet {
 	// Send a Tweet
 	tweet, _, err := c.client.Statuses.Update(msg, nil)
 	if err != nil {
@@ -95,4 +109,23 @@ func ExtractBody(text string) (string, error) {
 		return "", fmt.Errorf("failed extractBody (no match)")
 	}
 	return res[1], nil
+}
+
+func SplitLongText(text string, maxLength int) []string {
+	count := utf8.RuneCountInString(text)
+	if count <= maxLength {
+		return []string{text}
+	}
+
+	runeText := []rune(text)
+	splitNum := int(math.Ceil(float64(count) / float64(maxLength)))
+	res := make([]string, splitNum)
+	for i := 0; i < splitNum; i++ {
+		start, end := maxLength*i, maxLength*(i+1)
+		if end > count {
+			end = count
+		}
+		res[i] = string(runeText[start:end])
+	}
+	return res
 }
