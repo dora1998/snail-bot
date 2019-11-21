@@ -1,5 +1,18 @@
 version: "3"
 services:
+  mysql:
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - microservices
+    environment:
+      - MYSQL_ROOT_PASSWORD=hogefuga
+      - MYSQL_DATABASE=snail_bot
+      - MYSQL_USER=snailbot
+      - MYSQL_PASSWORD=botdatabase
+      - TZ=Asia/Tokyo
   snail-bot:
     command: /snail-bot serve
     build:
@@ -13,3 +26,5 @@ networks:
   microservices:
   nginx:
     external: true
+volumes:
+  mysql-data:
