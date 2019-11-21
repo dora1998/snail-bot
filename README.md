@@ -10,12 +10,44 @@ Twitterを愛してやまない電電生に向けた、課題を管理してく�
 
 `.env.sample` を `.env` としてコピーし、適宜編集したのちに以下のコマンドを実行する。
 
+### docker-compose
+
 ```shell script
 docker-compose -f docker-compose.deps.yaml -f docker-compose.dev.yaml up -d
 ```
 
-## ローカル環境での実行
+### ローカル環境での実行
+
+direnvとdotenvを入れておく。また、Go Modulesを使用できるようにしておく。
 
 ```shell script
+direnv allow
 go run main.go serve
+```
+
+### テスト
+
+```shell script
+go test -v ./...
+```
+
+## 使用方法
+
+### リプライによるコマンド実行
+★：Botがフォローしているアカウントからのみ実行可能
+
+**タスクの追加★**
+```
+@assignment_bot 追加 [タスク名] [期限(ex.12/31)]
+```
+
+**タスクの削除★**
+```
+@assignment_bot 削除 [タスク名]
+```
+※同名のタスクがある場合、最も最近作成したものが削除される
+
+**タスク一覧の取得**
+```
+@assignment_bot 一覧
 ```
