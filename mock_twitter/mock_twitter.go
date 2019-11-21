@@ -47,26 +47,27 @@ func (mr *MockTwitterClientMockRecorder) CreateFavorite(arg0 interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateFavorite", reflect.TypeOf((*MockTwitterClient)(nil).CreateFavorite), arg0)
 }
 
-// IsFollwing mocks base method
-func (m *MockTwitterClient) IsFollwing(arg0 string) bool {
+// IsFollowing mocks base method
+func (m *MockTwitterClient) IsFollowing(arg0 string) bool {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IsFollwing", arg0)
+	ret := m.ctrl.Call(m, "IsFollowing", arg0)
 	ret0, _ := ret[0].(bool)
 	return ret0
 }
 
-// IsFollwing indicates an expected call of IsFollwing
-func (mr *MockTwitterClientMockRecorder) IsFollwing(arg0 interface{}) *gomock.Call {
+// IsFollowing indicates an expected call of IsFollowing
+func (mr *MockTwitterClientMockRecorder) IsFollowing(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsFollwing", reflect.TypeOf((*MockTwitterClient)(nil).IsFollwing), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsFollowing", reflect.TypeOf((*MockTwitterClient)(nil).IsFollowing), arg0)
 }
 
 // Reply mocks base method
-func (m *MockTwitterClient) Reply(arg0 string, arg1 int64) *twitter.Tweet {
+func (m *MockTwitterClient) Reply(arg0 string, arg1 int64) (*twitter.Tweet, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Reply", arg0, arg1)
 	ret0, _ := ret[0].(*twitter.Tweet)
-	return ret0
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Reply indicates an expected call of Reply
@@ -76,15 +77,31 @@ func (mr *MockTwitterClientMockRecorder) Reply(arg0, arg1 interface{}) *gomock.C
 }
 
 // Tweet mocks base method
-func (m *MockTwitterClient) Tweet(arg0 string) *twitter.Tweet {
+func (m *MockTwitterClient) Tweet(arg0 string) (*twitter.Tweet, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Tweet", arg0)
 	ret0, _ := ret[0].(*twitter.Tweet)
-	return ret0
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Tweet indicates an expected call of Tweet
 func (mr *MockTwitterClientMockRecorder) Tweet(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Tweet", reflect.TypeOf((*MockTwitterClient)(nil).Tweet), arg0)
+}
+
+// TweetLongText mocks base method
+func (m *MockTwitterClient) TweetLongText(arg0, arg1 string) ([]*twitter.Tweet, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TweetLongText", arg0, arg1)
+	ret0, _ := ret[0].([]*twitter.Tweet)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// TweetLongText indicates an expected call of TweetLongText
+func (mr *MockTwitterClientMockRecorder) TweetLongText(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TweetLongText", reflect.TypeOf((*MockTwitterClient)(nil).TweetLongText), arg0, arg1)
 }

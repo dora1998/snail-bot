@@ -16,5 +16,8 @@ func (h *CommandHandler) list(username string, statusId int64) {
 		output = "現在出ている課題はありません🎉"
 	}
 
-	h.twitterClient.Reply(output, statusId)
+	_, err := h.twitterClient.Reply(output, statusId)
+	if err != nil {
+		_ = fmt.Errorf(err.Error())
+	}
 }

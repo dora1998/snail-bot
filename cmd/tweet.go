@@ -36,12 +36,12 @@ var tweetCmd = &cobra.Command{
 
 		repo := repository.NewDBRepository(dbInstance)
 
-		output := fmt.Sprintf("🐌 出ている課題 (%s)\n", time.Now().Format("1/2"))
+		output := ""
 		for _, t := range repo.GetAllTasks() {
 			output += fmt.Sprintf("・%s【%s〆】\n", t.Body, t.Deadline.Format("1/2"))
 		}
 
 		client := twitter.NewTwitterClient()
-		client.Tweet(output)
+		client.TweetLongText(output, fmt.Sprintf("🐌 出ている課題(%s) [{paged}/{pages}]", time.Now().Format("1/2")))
 	},
 }

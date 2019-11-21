@@ -9,6 +9,7 @@ import (
 	"math"
 	"regexp"
 	"strconv"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -35,37 +36,59 @@ func NewTwitterClient() *TwitterClient {
 	return &TwitterClient{client: client}
 }
 
-func (c *TwitterClient) Tweet(msg string) *twitter.Tweet {
+func (c *TwitterClient) Tweet(msg string) (*twitter.Tweet, error) {
 	// Send a Tweet
 	tweet, _, err := c.client.Statuses.Update(msg, nil)
 	if err != nil {
-		fmt.Println(err.Error())
+		return nil, err
 	}
 	fmt.Printf("%#v\n", tweet)
-	return tweet
+	return tweet, nil
 }
 
-func (c *TwitterClient) TweetLongText(msg string) *twitter.Tweet {
-	// Send a Tweet
-	tweet, _, err := c.client.Statuses.Update(msg, nil)
-	if err != nil {
-		fmt.Println(err.Error())
+func (c *TwitterClient) TweetLongText(text string, headText string) ([]*twitter.Tweet, error) {
+	maxLength := TWEET_MAX_LENGTH - utf8.RuneCountInString(headText)
+	texts := SplitLongText(text, maxLength)
+
+	pages := len(texts)
+	tweets := make([]*twitter.Tweet, pages)
+	var prevStatusId int64 = 0
+	for i, t := range texts {
+		text := headText + "\n"
+		text = strings.ReplaceAll(text, "{paged}", string(i+1))
+		text = strings.ReplaceAll(text, "{pages}", string(pages))
+		text += t
+		if i == 0 {
+			tweet, err := c.Tweet(text)
+			if err != nil {
+				return tweets, err
+			}
+			tweets[i] = tweet
+			prevStatusId = tweet.ID
+		} else {
+			tweet, err := c.Reply(text, prevStatusId)
+			if err != nil {
+				return tweets, err
+			}
+			tweets[i] = tweet
+			prevStatusId = tweet.ID
+		}
 	}
-	fmt.Printf("%#v\n", tweet)
-	return tweet
+
+	return tweets, nil
 }
 
-func (c *TwitterClient) Reply(msg string, tweetId int64) *twitter.Tweet {
+func (c *TwitterClient) Reply(msg string, tweetId int64) (*twitter.Tweet, error) {
 	// Send a Tweet
 	tweet, _, err := c.client.Statuses.Update(msg, &twitter.StatusUpdateParams{
 		InReplyToStatusID:         tweetId,
 		AutoPopulateReplyMetadata: Bool(true),
 	})
 	if err != nil {
-		fmt.Println(err.Error())
+		return nil, err
 	}
 	fmt.Printf("%#v\n", tweet)
-	return tweet
+	return tweet, nil
 }
 
 func (c *TwitterClient) CreateFavorite(tweetId int64) error {
@@ -73,7 +96,7 @@ func (c *TwitterClient) CreateFavorite(tweetId int64) error {
 	return err
 }
 
-func (c *TwitterClient) IsFollwing(screenName string) bool {
+func (c *TwitterClient) IsFollowing(screenName string) bool {
 	user, _, err := c.client.Users.Show(&twitter.UserShowParams{
 		ScreenName: screenName,
 	})
