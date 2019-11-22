@@ -141,17 +141,17 @@ func SplitLongText(text string, maxLength int) []string {
 	}
 
 	// 行の途中で分割されないように、行ごとに文字数チェック
-	count, str := 0, ""
 	lines := strings.Split(text, "\n")
+	count, str := utf8.RuneCountInString(lines[0]), lines[0]
 	res := make([]string, 0)
-	for _, l := range lines {
-		lineCount := utf8.RuneCountInString(l)
+	for i := 1; i < len(lines); i++ {
+		lineCount := utf8.RuneCountInString(lines[i])
 		if count+lineCount <= maxLength {
 			count += lineCount
-			str += l
+			str = strings.Join([]string{str, lines[i]}, "\n")
 		} else {
 			res = append(res, str)
-			count, str = lineCount, l
+			count, str = lineCount, lines[i]
 		}
 	}
 	res = append(res, str)
