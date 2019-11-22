@@ -112,26 +112,26 @@ func TestSplitLongText(t *testing.T) {
 		{
 			name: "> maxLength (all Japanese)",
 			args: args{
-				text:      "あいうえおかきくけこさしすせそ",
+				text:      "あいうえおかきく\nけこさしすせそ",
 				maxLength: 10,
 			},
-			want: []string{"あいうえおかきくけこ", "さしすせそ"},
+			want: []string{"あいうえおかきく", "けこさしすせそ"},
 		},
 		{
 			name: "> maxLength (all English)",
 			args: args{
-				text:      "abcdefghijklmno",
+				text:      "abcdefgh\nijklmno",
 				maxLength: 10,
 			},
-			want: []string{"abcdefghij", "klmno"},
+			want: []string{"abcdefgh", "ijklmno"},
 		},
 		{
 			name: "> maxLength (mixed)",
 			args: args{
-				text:      "abcdefghijアイウエオ🐌",
+				text:      "abcdefgh\nijアイウエオ🐌",
 				maxLength: 10,
 			},
-			want: []string{"abcdefghij", "アイウエオ🐌"},
+			want: []string{"abcdefgh", "ijアイウエオ🐌"},
 		},
 	}
 	for _, tt := range tests {

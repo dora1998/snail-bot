@@ -6,7 +6,6 @@ import (
 	"github.com/dghubble/oauth1"
 	"github.com/dora1998/snail-bot/utils"
 	"github.com/kelseyhightower/envconfig"
-	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -136,20 +135,25 @@ func ExtractBody(text string) (string, error) {
 }
 
 func SplitLongText(text string, maxLength int) []string {
-	count := utf8.RuneCountInString(text)
-	if count <= maxLength {
+	strLength := utf8.RuneCountInString(text)
+	if strLength <= maxLength {
 		return []string{text}
 	}
 
-	runeText := []rune(text)
-	splitNum := int(math.Ceil(float64(count) / float64(maxLength)))
-	res := make([]string, splitNum)
-	for i := 0; i < splitNum; i++ {
-		start, end := maxLength*i, maxLength*(i+1)
-		if end > count {
-			end = count
+	// 行の途中で分割されないように、行ごとに文字数チェック
+	count, str := 0, ""
+	lines := strings.Split(text, "\n")
+	res := make([]string, 0)
+	for _, l := range lines {
+		lineCount := utf8.RuneCountInString(l)
+		if count+lineCount <= maxLength {
+			count += lineCount
+			str += l
+		} else {
+			res = append(res, str)
+			count, str = lineCount, l
 		}
-		res[i] = string(runeText[start:end])
 	}
+	res = append(res, str)
 	return res
 }
