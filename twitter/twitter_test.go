@@ -133,6 +133,14 @@ func TestSplitLongText(t *testing.T) {
 			},
 			want: []string{"abcdefgh", "ijアイウエオ🐌"},
 		},
+		{
+			name: "> maxLength (multiline)",
+			args: args{
+				text:      "abcde\nfgh\nijアイウエオ🐌",
+				maxLength: 10,
+			},
+			want: []string{"abcde\nfgh", "ijアイウエオ🐌"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
