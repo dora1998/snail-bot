@@ -46,7 +46,7 @@ func TestCommandHandler_add(t *testing.T) {
 				}).Times(1)
 
 				mt := mock_twitter.NewMockTwitterClient(c)
-				mt.EXPECT().IsFollwing(gomock.Eq("testuser")).Return(true).Times(1)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
 				mt.EXPECT().Reply(gomock.Eq("タスクを追加しました！\ntest (2020/12/31)"), gomock.Eq(int64(0))).Times(1)
 				return mr, mt
 			},

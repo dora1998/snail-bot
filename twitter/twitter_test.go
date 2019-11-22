@@ -1,6 +1,9 @@
 package twitter
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func Test_extractStatusIdFromUrl(t *testing.T) {
 	type args struct {
@@ -83,6 +86,58 @@ func Test_extractBody(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("extractBody() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestSplitLongText(t *testing.T) {
+	type args struct {
+		text      string
+		maxLength int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []string
+	}{
+		{
+			name: "< maxLength",
+			args: args{
+				text:      "test",
+				maxLength: 10,
+			},
+			want: []string{"test"},
+		},
+		{
+			name: "> maxLength (all Japanese)",
+			args: args{
+				text:      "あいうえおかきく\nけこさしすせそ",
+				maxLength: 10,
+			},
+			want: []string{"あいうえおかきく", "けこさしすせそ"},
+		},
+		{
+			name: "> maxLength (all English)",
+			args: args{
+				text:      "abcdefgh\nijklmno",
+				maxLength: 10,
+			},
+			want: []string{"abcdefgh", "ijklmno"},
+		},
+		{
+			name: "> maxLength (mixed)",
+			args: args{
+				text:      "abcdefgh\nijアイウエオ🐌",
+				maxLength: 10,
+			},
+			want: []string{"abcdefgh", "ijアイウエオ🐌"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := SplitLongText(tt.args.text, tt.args.maxLength); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SplitLongText() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -27,10 +27,11 @@ type Repository interface {
 }
 
 type TwitterClient interface {
-	Tweet(msg string) *twitter.Tweet
-	Reply(msg string, tweetId int64) *twitter.Tweet
+	Tweet(msg string) (*twitter.Tweet, error)
+	Reply(msg string, tweetId int64) (*twitter.Tweet, error)
 	CreateFavorite(tweetId int64) error
-	IsFollwing(screenName string) bool
+	IsFollowing(screenName string) bool
+	TweetLongText(text string, headText string) ([]*twitter.Tweet, error)
 }
 
 func NewCommandHandler(repo Repository, twitterClient TwitterClient) *CommandHandler {
