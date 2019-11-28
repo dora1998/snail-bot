@@ -8,21 +8,17 @@ import (
 )
 
 type DBRepository struct {
-	db   *sqlx.DB
-	uuid uuid.UUID
+	db *sqlx.DB
 }
 
 func NewDBRepository(db *sqlx.DB) *DBRepository {
 	repo := &DBRepository{db: db}
-
-	u, _ := uuid.NewRandom()
-	repo.uuid = u
-
 	return repo
 }
 
 func (r *DBRepository) generateId() string {
-	return r.uuid.String()
+	u, _ := uuid.NewRandom()
+	return u.String()
 }
 
 func (r *DBRepository) Add(body string, deadline time.Time, createdBy string) *Task {
