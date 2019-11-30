@@ -29,6 +29,10 @@ func (h *CommandHandler) remove(body string, username string, statusId int64) {
 	err := h.repository.Remove(task.Id)
 	if err != nil {
 		fmt.Printf("DatabaseError: %#v\n", err)
+		_, err := h.twitterClient.Reply("タスクの削除に失敗しました…", statusId)
+		if err != nil {
+			_ = fmt.Errorf(err.Error())
+		}
 		return
 	}
 	fmt.Printf("removed: %#v\n", task)

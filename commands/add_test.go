@@ -51,6 +51,67 @@ func TestCommandHandler_add(t *testing.T) {
 				return mr, mt
 			},
 		},
+		{
+			"not following",
+			args{
+				body:     "test 12/31",
+				username: "testuser",
+				statusId: 0,
+			},
+			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
+				mt := mock_twitter.NewMockTwitterClient(c)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(false).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("この操作はフォローされている人しかできません🙇‍♂️"), gomock.Eq(int64(0))).Times(1)
+				return nil, mt
+			},
+		},
+		{
+			"incorrect format",
+			args{
+				body:     "test",
+				username: "testuser",
+				statusId: 0,
+			},
+			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
+				mt := mock_twitter.NewMockTwitterClient(c)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("タスクの追加に失敗しました…"), gomock.Eq(int64(0))).Times(1)
+				return nil, mt
+			},
+		},
+		{
+			"incorrect date format",
+			args{
+				body:     "test 15/99",
+				username: "testuser",
+				statusId: 0,
+			},
+			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
+				mt := mock_twitter.NewMockTwitterClient(c)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("タスクの追加に失敗しました…"), gomock.Eq(int64(0))).Times(1)
+				return nil, mt
+			},
+		},
+		{
+			"db error",
+			args{
+				body:     "test 12/31",
+				username: "testuser",
+				statusId: 0,
+			},
+			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
+				deadline := time.Date(2020, 12, 31, 0, 0, 0, 0, loc)
+
+				mr := mock_repository.NewMockRepository(c)
+				mr.EXPECT().Add(gomock.Eq("test"), gomock.Eq(deadline), gomock.Eq("testuser")).Return(nil).Times(1)
+
+				mt := mock_twitter.NewMockTwitterClient(c)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("タスクの追加に失敗しました…"), gomock.Eq(int64(0))).Times(1)
+				return mr, mt
+			},
+		},
 	}
 
 	for _, tt := range tests {

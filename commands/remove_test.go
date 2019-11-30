@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"github.com/dora1998/snail-bot/mock_repository"
 	"github.com/dora1998/snail-bot/mock_twitter"
 	"github.com/dora1998/snail-bot/repository"
@@ -41,6 +42,44 @@ func TestCommandHandler_remove(t *testing.T) {
 				mt := mock_twitter.NewMockTwitterClient(c)
 				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
 				mt.EXPECT().CreateFavorite(gomock.Eq(int64(0))).Times(1)
+				return mr, mt
+			},
+		},
+		{
+			"not following",
+			args{
+				body:     "test",
+				username: "testuser",
+				statusId: 0,
+			},
+			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
+				mt := mock_twitter.NewMockTwitterClient(c)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(false).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("この操作はフォローされている人しかできません🙇‍♂️"), gomock.Eq(int64(0))).Times(1)
+				return nil, mt
+			},
+		},
+		{
+			"db error",
+			args{
+				body:     "test",
+				username: "testuser",
+				statusId: 0,
+			},
+			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
+				mr := mock_repository.NewMockRepository(c)
+				mr.EXPECT().GetTaskByBody(gomock.Eq("test")).Return(&repository.Task{
+					Id:        "hoge",
+					Body:      "test",
+					Deadline:  time.Time{},
+					CreatedAt: time.Time{},
+					CreatedBy: "testuser",
+				}).Times(1)
+				mr.EXPECT().Remove(gomock.Eq("hoge")).Return(fmt.Errorf("error")).Times(1)
+
+				mt := mock_twitter.NewMockTwitterClient(c)
+				mt.EXPECT().IsFollowing(gomock.Eq("testuser")).Return(true).Times(1)
+				mt.EXPECT().Reply(gomock.Eq("タスクの削除に失敗しました…"), gomock.Eq(int64(0))).Times(1)
 				return mr, mt
 			},
 		},
