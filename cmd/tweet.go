@@ -44,7 +44,7 @@ var tweetCmd = &cobra.Command{
 		client := twitter.NewTwitterClient()
 		_, err = client.TweetLongText(output, fmt.Sprintf("🐌 出ている課題(%s) [{paged}/{pages}]", time.Now().Format("1/2")))
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 	},
 }

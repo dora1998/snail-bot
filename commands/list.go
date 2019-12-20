@@ -2,9 +2,10 @@ package commands
 
 import (
 	"fmt"
+	"log"
 )
 
-func (h *CommandHandler) list(username string, statusId int64) {
+func (h *CommandHandler) list(statusId int64) {
 	fmt.Printf("list (%v)\n", statusId)
 
 	output := ""
@@ -18,6 +19,6 @@ func (h *CommandHandler) list(username string, statusId int64) {
 
 	_, err := h.twitterClient.Reply(output, statusId)
 	if err != nil {
-		_ = fmt.Errorf(err.Error())
+		log.Fatal(err.Error())
 	}
 }

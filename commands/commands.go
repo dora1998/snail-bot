@@ -54,7 +54,7 @@ func (h *CommandHandler) Resolve(text string, username string, statusId int64) e
 	case "削除":
 		h.remove(commandBody, username, statusId)
 	case "一覧":
-		h.list(username, statusId)
+		h.list(statusId)
 	default:
 		return fmt.Errorf("failed resolve (no match)")
 	}

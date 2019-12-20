@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/dora1998/snail-bot/utils"
+	"log"
 	"regexp"
 )
 
@@ -13,7 +14,7 @@ func (h *CommandHandler) add(body string, username string, statusId int64) {
 		fmt.Printf("PermissionError: not following @%v\n", username)
 		_, err := h.twitterClient.Reply("この操作はフォローされている人しかできません🙇‍♂️", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
@@ -24,7 +25,7 @@ func (h *CommandHandler) add(body string, username string, statusId int64) {
 		fmt.Printf("ParseError: %#v\n", body)
 		_, err := h.twitterClient.Reply("タスクの追加に失敗しました…", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
@@ -34,7 +35,7 @@ func (h *CommandHandler) add(body string, username string, statusId int64) {
 		fmt.Printf("ParseDateError: %#v\n", parsedBody[2])
 		_, err := h.twitterClient.Reply("タスクの追加に失敗しました…", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
@@ -44,7 +45,7 @@ func (h *CommandHandler) add(body string, username string, statusId int64) {
 		fmt.Printf("DatabaseError: %v\n", body)
 		_, err := h.twitterClient.Reply("タスクの追加に失敗しました…", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
@@ -52,6 +53,6 @@ func (h *CommandHandler) add(body string, username string, statusId int64) {
 	fmt.Printf("added: %#v\n", task)
 	_, err = h.twitterClient.Reply(fmt.Sprintf("タスクを追加しました！\n%v (%v)", parsedBody[1], parsedDate.Format("2006/1/2")), statusId)
 	if err != nil {
-		_ = fmt.Errorf(err.Error())
+		log.Fatal(err.Error())
 	}
 }
