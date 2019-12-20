@@ -95,18 +95,14 @@ func (s *Server) PostWebHook(c *gin.Context) {
 		text, err := twitter.ExtractBody(t.Text)
 		if err != nil {
 			fmt.Println(err.Error())
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.String(http.StatusOK, "")
 			return
 		}
 
 		err = s.commandHandler.Resolve(text, t.User.Name, statusId)
 		if err != nil {
 			fmt.Println(err.Error())
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.String(http.StatusOK, "")
 			return
 		}
 	}
