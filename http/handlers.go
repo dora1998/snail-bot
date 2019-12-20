@@ -54,3 +54,9 @@ func (s *Server) IFTTTCallback(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, nil)
 }
+
+func (s *Server) WebHookChallenge(c *gin.Context) {
+	crcToken := c.Query("crc_token")
+	resToken := s.twitterClient.CreateCRCToken(crcToken)
+	c.JSON(http.StatusOK, gin.H{"response_token": resToken})
+}

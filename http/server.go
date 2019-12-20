@@ -13,6 +13,8 @@ import (
 
 type Server struct {
 	dbInstance     *sqlx.DB
+	repository     *repository.DBRepository
+	twitterClient  *twitter.TwitterClient
 	commandHandler *commands.CommandHandler
 }
 
@@ -35,12 +37,13 @@ func NewServer() *Server {
 	twitterClient := twitter.NewTwitterClient()
 	handler := commands.NewCommandHandler(repo, twitterClient)
 
-	return &Server{dbInstance: dbInstance, commandHandler: handler}
+	return &Server{dbInstance: dbInstance, repository: repo, twitterClient: twitterClient, commandHandler: handler}
 }
 
 func (s *Server) Routes() *gin.Engine {
 	router := gin.Default()
 	router.POST("/callback", s.IFTTTCallback)
+	router.GET("/webhook/twitter", s.WebHookChallenge)
 	return router
 }
 
