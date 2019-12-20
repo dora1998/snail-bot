@@ -23,7 +23,6 @@ func TestCommandHandler_list(t *testing.T) {
 		{
 			"one task",
 			args{
-				username: "test",
 				statusId: 0,
 			},
 			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
@@ -46,7 +45,6 @@ func TestCommandHandler_list(t *testing.T) {
 		{
 			"no task",
 			args{
-				username: "test",
 				statusId: 0,
 			},
 			func(c *gomock.Controller) (*mock_repository.MockRepository, *mock_twitter.MockTwitterClient) {
@@ -69,7 +67,7 @@ func TestCommandHandler_list(t *testing.T) {
 				repository:    repo,
 				twitterClient: twitterClient,
 			}
-			h.list(tt.args.username, tt.args.statusId)
+			h.list(tt.args.statusId)
 		})
 	}
 }
