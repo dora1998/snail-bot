@@ -99,7 +99,7 @@ func (s *Server) PostWebHook(c *gin.Context) {
 			return
 		}
 
-		err = s.commandHandler.Resolve(text, t.User.Name, statusId)
+		err = s.commandHandler.Resolve(text, t.User.ScreenName, statusId)
 		if err != nil {
 			fmt.Println(err.Error())
 			c.String(http.StatusOK, "")
