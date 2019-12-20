@@ -42,8 +42,9 @@ func NewServer() *Server {
 
 func (s *Server) Routes() *gin.Engine {
 	router := gin.Default()
-	router.POST("/callback", s.IFTTTCallback)
-	router.GET("/webhook/twitter", s.WebHookChallenge)
+	router.POST("/webhook/ifttt", s.PostIFTTTWebHook)
+	router.GET("/webhook/twitter", s.GetCRCToken)
+	router.POST("/webhook/twitter", s.PostWebHook)
 	return router
 }
 
