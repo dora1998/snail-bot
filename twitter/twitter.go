@@ -15,7 +15,8 @@ import (
 const TWEET_MAX_LENGTH = 140
 
 type TwitterClient struct {
-	client *twitter.Client
+	client    *twitter.Client
+	envConfig utils.Env
 }
 
 func NewTwitterClient() *TwitterClient {
@@ -32,7 +33,7 @@ func NewTwitterClient() *TwitterClient {
 	// Twitter client
 	client := twitter.NewClient(httpClient)
 
-	return &TwitterClient{client: client}
+	return &TwitterClient{client: client, envConfig: env}
 }
 
 func (c *TwitterClient) Tweet(msg string) (*twitter.Tweet, error) {

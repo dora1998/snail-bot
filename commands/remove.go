@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"log"
 )
 
 func (h *CommandHandler) remove(body string, username string, statusId int64) {
@@ -11,7 +12,7 @@ func (h *CommandHandler) remove(body string, username string, statusId int64) {
 		fmt.Printf("PermissionError: not following @%v\n", username)
 		_, err := h.twitterClient.Reply("この操作はフォローされている人しかできません🙇‍♂️", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
@@ -21,7 +22,7 @@ func (h *CommandHandler) remove(body string, username string, statusId int64) {
 		fmt.Printf("TaskNotFound: %v\n", body)
 		_, err := h.twitterClient.Reply("該当するタスクが見つかりません", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
@@ -31,7 +32,7 @@ func (h *CommandHandler) remove(body string, username string, statusId int64) {
 		fmt.Printf("DatabaseError: %#v\n", err)
 		_, err := h.twitterClient.Reply("タスクの削除に失敗しました…", statusId)
 		if err != nil {
-			_ = fmt.Errorf(err.Error())
+			log.Fatal(err.Error())
 		}
 		return
 	}
