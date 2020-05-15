@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   deplpy-staging:
-    name: Deploy https-portal
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Install SSH key
@@ -30,6 +30,11 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
       - name: Check out
         uses: actions/checkout@v1
+      - name: Copy .env from secrets
+        run: 'echo "$SNAIL_BOT_ENV" > .env'
+          shell: bash
+          env:
+            SNAIL_BOT_ENV: ${{secrets.SNAIL_BOT_ENV}}
       - name: Deploy snail-bot
         run: make deploy
         env:
