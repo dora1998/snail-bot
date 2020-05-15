@@ -1,0 +1,46 @@
+name: deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deplpy-staging:
+    name: Deploy https-portal
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v1
+        with:
+          private-key: ${{ secrets.SSH_KEY }}
+          public-key: ${{ secrets.SSH_KEY_PUBLIC }}
+          name: id_rsa
+          known-hosts: ${{ secrets.KNOWN_HOSTS }}
+      - name: Install pre release docker-compose
+        run: |
+          curl -L https://github.com/docker/compose/releases/download/1.26.0-rc2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+          chmod +x ~/docker-compose
+          sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - name: Set docker context
+        run: |
+          docker context create --default-stack-orchestrator=swarm --docker "host=ssh://${SSH_USERNAME}@${SSH_IP}:${SSH_PORT}" conoha
+          docker context use conoha
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_IP: ${{ secrets.SSH_IP }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+      - name: Check out
+        uses: actions/checkout@v1
+      - name: Deploy snail-bot
+        run: make deploy
+        env:
+          COMPOSE_HTTP_TIMEOUT: 600
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: conoha
+          SLACK_MESSAGE: 'snail-botのデプロイに失敗しました。'
+          SLACK_TITLE: メッセージ
+          SLACK_USERNAME: GitHub Actions (${{ github.repository }})
+          SLACK_COLOR: '#e74c3c'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
