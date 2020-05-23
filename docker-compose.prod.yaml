@@ -3,6 +3,7 @@ services:
   mysql:
     image: mysql:5.7
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    restart: always
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -15,6 +16,7 @@ services:
       - TZ=Asia/Tokyo
   snail-bot:
     command: /snail-bot serve
+    restart: always
     build:
       context: ./
     networks:
