@@ -10,7 +10,7 @@ require (
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/golang/mock v1.4.3
 	github.com/google/uuid v1.1.1
-	github.com/jmoiron/sqlx v1.2.0
+	github.com/jmoiron/sqlx v1.3.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/rubenv/sql-migrate v0.0.0-20190902133344-8926f37f0bc1
 	github.com/spf13/cobra v0.0.7
