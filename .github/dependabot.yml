@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "20:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: github.com/jmoiron/sqlx
+    versions:
+    - 1.3.0
+  - dependency-name: github.com/golang/mock
+    versions:
+    - 1.4.4
